@@ -6,14 +6,14 @@
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:15:01 by mblej             #+#    #+#             */
-/*   Updated: 2023/08/31 01:48:35 by mblej            ###   ########.fr       */
+/*   Updated: 2023/08/31 22:44:18 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#ifndef FILDF_H
+# define FILDF_H
 # include <unistd.h>
-
+# include <stdlib.h>
 
 typedef struct fdf
 {

@@ -6,17 +6,16 @@
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 01:19:05 by mblej             #+#    #+#             */
-/*   Updated: 2023/08/31 01:24:50 by mblej            ###   ########.fr       */
+/*   Updated: 2023/08/31 22:44:06 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fildf.h"
 
 int	main(int ac, char **av)
 {
-	int fd;
-	char	**
-	fd = open("../test_maps/10-2.fdf", O_RDONLY);
-	if (!fd)
-		return (-1);
+	t_fdf fdf;
+	if(ac != 2 || !av[1])
+		return(1);
+	parser(av[1], &fdf);
 }

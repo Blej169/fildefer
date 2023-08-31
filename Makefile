@@ -6,25 +6,30 @@
 #    By: mblej <mblej@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/29 23:21:16 by mblej             #+#    #+#              #
-#    Updated: 2023/08/31 01:28:42 by mblej            ###   ########.fr        #
+#    Updated: 2023/08/31 22:49:09 by mblej            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 HEAD = fdf
-SRC = fdf/parse.c ../get_next_line/get_next_line.c ../get_next_line/get_next_line_utils.c
-
+SRC = fildf/parse.c fildf/main.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
 FLAGS = -Wall -Wextra -Werror
-HEADERS = ../get_next_line/get_next_line.h fdf/fdf.h
-OBJ = $(SRC: .c=.o)
-all : $(HEAD)
+HEADERS = get_next_line/get_next_line.h fildf/fildf.h
+OBJS = $(SRC:.c=.o)
 
-$(HEAD): $(OBJ)
-	gcc	$(FLAGS) $(OBJ) -o $(HEAD)
+all: $(HEAD)
+
+$(HEAD): $(OBJS)
+    gcc $(FLAGS) $(OBJS) -o $(HEAD)
 
 %.o: %.c $(HEADERS)
-	gcc $(FLAGS) -c $< -o $@
+    gcc $(FLAGS) -c $< -o $@
 
 clean:
-rm -f $(OBJS)
+    rm -f $(OBJS)
 
 fclean: clean
+    rm -f $(HEAD)
+
+re: fclean all
+
+.PHONY: all clean fclean re
