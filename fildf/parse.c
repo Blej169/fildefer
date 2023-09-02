@@ -6,7 +6,7 @@
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:16:56 by mblej             #+#    #+#             */
-/*   Updated: 2023/08/31 22:44:10 by mblej            ###   ########.fr       */
+/*   Updated: 2023/09/02 22:48:14 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,5 @@ void	parser(char *str, t_fdf *fil)
 		if (counter(l, ' ') != fil->width || fil->height == 0)
 			return ;//error
 	}
-	
 }
 
