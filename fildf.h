@@ -1,22 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   fildf.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/31 01:19:05 by mblej             #+#    #+#             */
-/*   Updated: 2023/09/02 22:49:04 by mblej            ###   ########.fr       */
+/*   Created: 2023/08/29 23:15:01 by mblej             #+#    #+#             */
+/*   Updated: 2023/09/02 23:22:30 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fildf.h"
+#ifndef FILDF_H
+# define FILDF_H
+# include <unistd.h>
+# include <stdlib.h>
+# include <math.h>
+# include "MLX42/include/MLX42/MLX42.h"
+# include <fcntl.h>
+# include "utils/get_next_line.h"
 
-int	main(int ac, char **av)
+typedef struct fdf
 {
-	t_fdf fdf;
-	if(ac != 2 || !av[1])
-		return(1);
-	parser(av[1], &fdf);
-	return 0;
-}
+    int width;
+    int height;
+} t_fdf;
+
+int	counter(char *str, char c);
+void	parser(char *str, t_fdf *fil);
+#endif

@@ -6,7 +6,7 @@
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 00:05:29 by mblej             #+#    #+#             */
-/*   Updated: 2023/08/31 01:46:55 by mblej            ###   ########.fr       */
+/*   Updated: 2023/09/02 23:19:37 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # endif
 
 # include <fcntl.h>
-# include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 
