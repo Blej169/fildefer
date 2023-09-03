@@ -1,23 +1,23 @@
-
-HEAD = fdf
-SRC = main.c get_next_line.c get_next_line_utils.c parse.c
+NAME = fdf
+CC = gcc
+SRC = main.c utils/get_next_line.c utils/get_next_line_utils.c parse.c
 OBJS = $(SRC:.c=.o)
-HEADERS = get_next_line.h fildf.h
-FLAGS = -Wall -Wextra -Werror
+HEADERS = fildf.h
+CFLAGS := -Wall -Wextra -Werror
 
-all: $(HEAD)
+all: $(NAME)
 
-$(HEAD): $(OBJS)
-    gcc $(FLAGS) $(OBJS) -o $(HEAD)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c $(HEADERS)
-    gcc $(FLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-    rm -f $(OBJS)
+	rm -f $(OBJS)
 
 fclean: clean
-    rm -f $(HEAD)
+	rm -f $(NAME)
 
 re: fclean all
 
