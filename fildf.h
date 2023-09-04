@@ -24,14 +24,15 @@
 
 typedef struct s_fdf
 {
-    int width;
-    int height;
-    int attitude;
-    int **data;
+	int width;
+	int height;
+	int attitude;
+	int **data;
 }   t_fdf;
 
 int	counter(char *str, char c);
 void	parser(char *str, t_fdf *fil);
 void    init_size(int fd, t_fdf *fil);
+char    *my_strtok(char* str, const char* delimiters);
 
 #endif

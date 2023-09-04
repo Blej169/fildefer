@@ -24,7 +24,7 @@
 char	*get_next_line(int fd);
 size_t	my_strlen(char *s);
 char	*my_strjoin(char *s1, char *s2);
-char	*my_strchr(char *s, int c);
+char	*my_strchr(char const *s, int c);
 char	*ft_send_join(char *s1, char *s2);
 char	*my_strdup(char *s1);
 #endif

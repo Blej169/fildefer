@@ -70,14 +70,16 @@ char	*my_strjoin(char *str, char *buff)
 	return (tmp);
 }
 
-char	*my_strchr(char *s, int c)
+char	*my_strchr(const char *s, int c)
 {
+	char *str;
 	if (!s)
 		return (NULL);
-	while (*s && (*s != c))
-		s++;
-	if (*s == c)
-		return (s);
+	str = (char *)s;
+	while (*str && (*str != c))
+		str++;
+	if (*str == c)
+		return (str);
 	return (NULL);
 }
 
