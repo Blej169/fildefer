@@ -34,5 +34,6 @@ int	counter(char *str, char c);
 void	parser(char *str, t_fdf *fil);
 void    init_size(int fd, t_fdf *fil);
 char    *my_strtok(char* str, const char* delimiters);
+int	ft_atoi(const char *str);
 
 #endif

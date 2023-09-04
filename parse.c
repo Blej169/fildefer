@@ -32,19 +32,30 @@ int	counter(char *str, char c)
 	return (cmp);
 }
 
-// char    *my_strchr(const char *str, int c)
-// {
-// 		char *s;
+int	ft_atoi(const char *str)
+{
+	unsigned int	r;
+	int				i;
+	int				ng;
 
-// 		if (!str)
-// 				return (NULL);
-// 		s = (char *)str;
-// 		while (*s && (*s != c))
-// 				s++;
-// 		if (*s == c)
-// 				return (s);
-// 		return (NULL);
-// }
+	i = 0;
+	ng = 1;
+	r = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			ng *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		r = str[i] - '0' + (r * 10);
+		i++;
+	}
+	return ((r * ng));
+}
 
 /* Custom strtok function*/
 char*   my_strtok(char* str, const char* delimiters)
@@ -133,7 +144,7 @@ void parser(char *str, t_fdf *fil)
 		char *token = my_strtok(line, " ");
 		x = 0;
 		while (token != NULL) {
-			int value = atoi(token);
+			int value = ft_atoi(token);
 			fil->data[y][x] = value;
 
 			/* Calculate attitude based on z-coordinate (the value)*/
