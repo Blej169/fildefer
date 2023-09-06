@@ -12,25 +12,20 @@
 
 #include "fildf.h"
 
-int	main(int ac, char **av)
+int32_t	main(int ac, char **av)
 {
 	t_fdf fdf;
-	int i = 0;
 
 	if(ac != 2 || !av[1])
 		return(1);
 	parser(av[1], &fdf);
-	while (i < fdf.height)
-	{
-		int j =0;
-		while (j < fdf.width)
-		{
-			printf("%d.%d  ", fdf.data[i][j].z, fdf.data[i][j].color);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	
-	return 0;
+    mlx_t *mlx = mlx_init(WIDTH, HEIGHT, "42Balls", false);
+    mlx_image_t *img = mlx_new_image(mlx, WIDTH, HEIGHT);
+    mlx_image_to_window(mlx, img, 0, 0);
+    ft_drew_map(&fdf, img);
+
+    mlx_loop(mlx);
+    mlx_terminate(mlx);
+    return (EXIT_SUCCESS);
 }
+

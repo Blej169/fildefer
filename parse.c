@@ -67,7 +67,7 @@ int	counter(char *str, char c)
 	{
 		while (str[i] == c && str[i])
 			i++;
-		if (str[i] != c && str[i])
+		if (str[i] != c && str[i] != '\n' && str[i])
 			cmp++;
 		while (str[i] != c && str[i])
 			i++;

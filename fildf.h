@@ -22,7 +22,9 @@
 # include <fcntl.h>
 # include  <string.h>
 # include "utils/get_next_line.h"
-
+#include <stdint.h>
+# define WIDTH 1200
+# define HEIGHT 1200
 
 typedef struct s_data
 {
@@ -38,6 +40,10 @@ typedef struct s_fdf
 	t_data **data;
 }   t_fdf;
 
+typedef struct s_coor{
+	float x ;
+	float y ;
+}	t_coor;
 
 int	counter(char *str, char c);
 void	parser(char *str, t_fdf *fil);
@@ -48,5 +54,8 @@ uint8_t custom_parse_color(char *str);
 int ft_tolower(char c);
 int	get_digit(char c, int base);
 int ft_atoi_base(char *str, int base_digit);
+void ft_drew_map(t_fdf *fdf, mlx_image_t *img);
+void ft_drew_line(t_coor a,  t_coor b, mlx_image_t *img);
+t_coor update_x(int i, int j, int initx, int  inity);
 
 #endif
