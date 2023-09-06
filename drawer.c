@@ -4,7 +4,7 @@ t_coor update_x(int i, int j, int initx, int  inity)
 {
     t_coor a;
     a.x = (4 *i) + initx;
-    a.y = j + inity + (2*i) ;
+    a.y = j + inity + (2*i);
     return a;
 }
                                                                                                                                                                                                                       
@@ -37,8 +37,8 @@ void ft_drew_map(t_fdf *fdf, mlx_image_t *img)
     while(j <= delta * fdf->width)
     {
         i = 0;
-        initx = (WIDTH /2) - 2*j; 
-        inity = 10 + j;  
+        initx = (WIDTH /2) - 2*j;
+        inity = 10 + j;
         while( i <= fdf->height * delta)
         {
             t_coor a = update_x(i, j , initx, inity);
@@ -53,5 +53,5 @@ void ft_drew_map(t_fdf *fdf, mlx_image_t *img)
            i += delta;
         }
         j += delta;
-    }   
+    }
 }

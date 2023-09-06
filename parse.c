@@ -6,7 +6,7 @@
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:16:56 by mblej             #+#    #+#             */
-/*   Updated: 2023/09/04 00:37:00 by mblej            ###   ########.fr       */
+/*   Updated: 2023/09/07 00:38:01 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int ft_tolower(char c)
 		return (c+32);
 	return c;
 }
+
+
 
 int	get_digit(char c, int base)
 {
@@ -50,7 +52,7 @@ int ft_atoi_base(char *s, int base_digit) {
     while ((digit = get_digit(ft_tolower(*s), base_digit)) >= 0) {
 		result = result * base_digit + (digit * sign);
         s++;
-    }
+	}
 	if (get_digit(ft_tolower(*(s)), base_digit) == -1 && *s)
 		return 0;
     return result;
@@ -146,8 +148,8 @@ void    init_size(int fd, t_fdf *fil)
 	close(fd);
 }
 
-uint8_t custom_parse_color(char *str) {
-    uint8_t color = 0;
+int custom_parse_color(char *str) {
+    int  color = 0;
     
     while (*str != '\0' && *str != ',') {
         str++;
@@ -157,7 +159,26 @@ uint8_t custom_parse_color(char *str) {
         if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
             str += 2;
         }
-        color = (uint8_t)ft_atoi_base(str, 16);
+		while(*str)
+		{
+			if( *str >= '0' && *str <= '9')
+			{
+				color += *str - 48;
+				color *= 16;
+				
+			}
+			else if((*str >= 'a' && *str <= 'f') || (*str >= 'A' && *str <= 'F')) 
+			{ 
+				color += ft_tolower(*str) - 87; 
+				color *= 16; 
+			}
+			str++;
+		}
+		color /= 16;
+
+        //color = ft_atoi_base(str, 16);
+		//printf("%d\n", color);
+		//exit(0);
     }
     return color;
 }
@@ -178,26 +199,30 @@ void parser(char *str, t_fdf *fil)
     }
     fd = open(str, O_RDONLY);
     y = -1;
+	
     while (++y < fil->height && (line = get_next_line(fd)) != NULL)
     {
         char *token = my_strtok(line, " ");
         x = 0;
         while (token != NULL) {
             int z_value;
-            uint8_t color = 0xFF; 
+            int color = 0xFF; 
             char *comma_ptr = strchr(token, ',');
             
             if (comma_ptr != NULL) {
                 z_value = ft_atoi(token);
-                color = (uint8_t)custom_parse_color(token);
+                color = custom_parse_color(token);
             }
             else
                 z_value = ft_atoi(token);
             fil->data[y][x].z = z_value;
             fil->data[y][x].color = color;
             token = my_strtok(NULL, " ");
+			printf("%d\t", color);
             x++;
         }
+		printf("\n");
     }
+	
     close(fd);
 }
