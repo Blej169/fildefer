@@ -16,6 +16,7 @@ int	main(int ac, char **av)
 {
 	t_fdf fdf;
 	int i = 0;
+
 	if(ac != 2 || !av[1])
 		return(1);
 	parser(av[1], &fdf);
@@ -24,7 +25,7 @@ int	main(int ac, char **av)
 		int j =0;
 		while (j < fdf.width)
 		{
-			printf("%d  ", fdf.data[i][j]);
+			printf("%d.%d  ", fdf.data[i][j].z, fdf.data[i][j].color);
 			j++;
 		}
 		printf("\n");

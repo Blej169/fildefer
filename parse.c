@@ -12,6 +12,49 @@
 
 #include "fildf.h"
 
+int ft_tolower(char c)
+{
+	if(c <= 'Z' && c >= 'A')
+		return (c+32);
+	return c;
+}
+
+int	get_digit(char c, int base)
+{
+	int max_digit;
+
+	if(base<=10)
+		max_digit = base + '0';
+	else
+		max_digit = base - 10 + 'a';
+
+	if (c >= '0' && c <= '9' && c < max_digit)
+		return (c - '0');
+	else if (c >= 'a' && c <= 'f' && c < max_digit)
+		return (c - 'a' + 10);
+	else
+		return(-1);
+}
+
+int ft_atoi_base(char *s, int base_digit) {
+    int result = 0;
+    int sign = 1;
+    int digit;
+
+    if (base_digit < 2 || base_digit > 16)
+        return 0;
+    if (*s == '-') {
+        sign = -1;
+        ++s;
+    }
+    while ((digit = get_digit(ft_tolower(*s), base_digit)) >= 0) {
+		result = result * base_digit + (digit * sign);
+        s++;
+    }
+	if (get_digit(ft_tolower(*(s)), base_digit) == -1 && *s)
+		return 0;
+    return result;
+}
 
 int	counter(char *str, char c)
 {
@@ -57,7 +100,7 @@ int	ft_atoi(const char *str)
 	return ((r * ng));
 }
 
-/* Custom strtok function*/
+ //Custom strtok function
 char*   my_strtok(char* str, const char* delimiters)
 {
 	static char	*lastToken;
@@ -67,39 +110,23 @@ char*   my_strtok(char* str, const char* delimiters)
 		lastToken = str;
 	else if (lastToken == NULL)
 		return NULL;
-	/* Find the start of the next token (skip leading delimiters)*/
+	 //Find the start of the next token (skip leading delimiters)
 	tokenStart = lastToken;
 	while (*lastToken != '\0' && my_strchr(delimiters, *lastToken) != NULL)
 		lastToken++;
-	/* If no token is found, return NULL*/
+	// If no token is found, return NULL
 	if (*lastToken == '\0')
 		return NULL;
-	/* Find the end of the next token*/
+	// Find the end of the next token
 	while (*lastToken != '\0' && my_strchr(delimiters, *lastToken) == NULL)
 		lastToken++;
-	/* Null-terminate the token and update lastToken*/
+	// Null-terminate the token and update lastToken
 	if (*lastToken != '\0'){
 		*lastToken = '\0';
 		lastToken++;
 	}
 	return tokenStart;
 }
-
-// int main() {
-// 		char str[] = "This is a sample string, with tokens.";
-// 		const char delimiters[] = " ,."; // Delimiters: space, comma, and period
-
-// 		// Tokenize the string and print the tokens
-// 		char* token = custom_strtok(str, delimiters);
-// 		while (token != NULL) {
-// 				printf("Token: %s\n", token);
-// 				token = custom_strtok(NULL, delimiters);
-// 		}
-
-// 		return 0;
-// }
-
-  
 
 void    init_size(int fd, t_fdf *fil)
 {
@@ -119,45 +146,58 @@ void    init_size(int fd, t_fdf *fil)
 	close(fd);
 }
 
+uint8_t custom_parse_color(char *str) {
+    uint8_t color = 0;
+    
+    while (*str != '\0' && *str != ',') {
+        str++;
+    }
+    if (*str == ',') {
+        str++; 
+        if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+            str += 2;
+        }
+        color = (uint8_t)ft_atoi_base(str, 16);
+    }
+    return color;
+}
+
+
 void parser(char *str, t_fdf *fil)
 {
-	char *line;
-	int fd;
-	int y = 0, x;
+    char *line;
+    int fd;
+    int y , x;
 
-	fd = open(str, O_RDONLY);
-	init_size(fd, fil);
-	/* Allocate memory for the data 2D array*/
-	fil->data = (int **)malloc(fil->height * sizeof(int *));
-	while (y < fil->height) {
-		fil->data[y] = (int *)malloc(fil->width * sizeof(int));
-		y++;
-	}
-	/* Reset the file descriptor to the beginning of the file*/
-	fd = open(str, O_RDONLY);
-
-	/* Now, read and store the data values into fil->data*/
-	y = 0;
-	while (y < fil->height && (line = get_next_line(fd)) != NULL)
-	{
-		/* Parse and store values in fil->data[y][x]*/
-		char *token = my_strtok(line, " ");
-		x = 0;
-		while (token != NULL) {
-			int value = ft_atoi(token);
-			fil->data[y][x] = value;
-
-			/* Calculate attitude based on z-coordinate (the value)*/
-			if (value > fil->attitude) {
-				fil->attitude = value;
-			}
-
-			token = my_strtok(NULL, " ");
-			x++;
-		}
-
-		y++;
-	}
-
-	close(fd);
+    y = -1;
+    fd = open(str, O_RDONLY);
+    init_size(fd, fil);
+    fil->data = (t_data **)malloc(fil->height * sizeof(t_data *));
+    while (++y < fil->height) {
+        fil->data[y] = (t_data *)malloc(fil->width * sizeof(t_data));
+    }
+    fd = open(str, O_RDONLY);
+    y = -1;
+    while (++y < fil->height && (line = get_next_line(fd)) != NULL)
+    {
+        char *token = my_strtok(line, " ");
+        x = 0;
+        while (token != NULL) {
+            int z_value;
+            uint8_t color = 0xFF; 
+            char *comma_ptr = strchr(token, ',');
+            
+            if (comma_ptr != NULL) {
+                z_value = ft_atoi(token);
+                color = (uint8_t)custom_parse_color(token);
+            }
+            else
+                z_value = ft_atoi(token);
+            fil->data[y][x].z = z_value;
+            fil->data[y][x].color = color;
+            token = my_strtok(NULL, " ");
+            x++;
+        }
+    }
+    close(fd);
 }
