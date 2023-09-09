@@ -6,7 +6,7 @@
 /*   By: mblej <mblej@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 23:16:56 by mblej             #+#    #+#             */
-/*   Updated: 2023/09/07 00:38:01 by mblej            ###   ########.fr       */
+/*   Updated: 2023/09/09 03:22:56 by mblej            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,45 +17,6 @@ int ft_tolower(char c)
 	if(c <= 'Z' && c >= 'A')
 		return (c+32);
 	return c;
-}
-
-
-
-int	get_digit(char c, int base)
-{
-	int max_digit;
-
-	if(base<=10)
-		max_digit = base + '0';
-	else
-		max_digit = base - 10 + 'a';
-
-	if (c >= '0' && c <= '9' && c < max_digit)
-		return (c - '0');
-	else if (c >= 'a' && c <= 'f' && c < max_digit)
-		return (c - 'a' + 10);
-	else
-		return(-1);
-}
-
-int ft_atoi_base(char *s, int base_digit) {
-    int result = 0;
-    int sign = 1;
-    int digit;
-
-    if (base_digit < 2 || base_digit > 16)
-        return 0;
-    if (*s == '-') {
-        sign = -1;
-        ++s;
-    }
-    while ((digit = get_digit(ft_tolower(*s), base_digit)) >= 0) {
-		result = result * base_digit + (digit * sign);
-        s++;
-	}
-	if (get_digit(ft_tolower(*(s)), base_digit) == -1 && *s)
-		return 0;
-    return result;
 }
 
 int	counter(char *str, char c)
@@ -143,22 +104,22 @@ void    init_size(int fd, t_fdf *fil)
 		if (!l)
 			break;
 		if (counter(l, ' ') != fil->width || fil->height == 0)
-			return ;//error
+			return ;
 	}
 	close(fd);
 }
 
-int custom_parse_color(char *str) {
-    int  color = 0;
-    
-    while (*str != '\0' && *str != ',') {
-        str++;
-    }
-    if (*str == ',') {
-        str++; 
-        if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
-            str += 2;
-        }
+unsigned int custom_parse_color(char *str) {
+	unsigned  int color = 0;
+	
+	while (*str != '\0' && *str != ',') {
+		str++;
+	}
+	if (*str == ',') {
+		str++; 
+		if (str[0] == '0' && (str[1] == 'x' || str[1] == 'X')) {
+			str += 2;
+		}
 		while(*str)
 		{
 			if( *str >= '0' && *str <= '9')
@@ -169,60 +130,53 @@ int custom_parse_color(char *str) {
 			}
 			else if((*str >= 'a' && *str <= 'f') || (*str >= 'A' && *str <= 'F')) 
 			{ 
-				color += ft_tolower(*str) - 87; 
+				color += ft_tolower(*str) - 87;
 				color *= 16; 
 			}
 			str++;
 		}
 		color /= 16;
-
-        //color = ft_atoi_base(str, 16);
-		//printf("%d\n", color);
-		//exit(0);
-    }
-    return color;
+	}
+	return color;
 }
 
 
 void parser(char *str, t_fdf *fil)
 {
-    char *line;
-    int fd;
-    int y , x;
+	char *line;
+	int fd;
+	int y , x;
 
-    y = -1;
-    fd = open(str, O_RDONLY);
-    init_size(fd, fil);
-    fil->data = (t_data **)malloc(fil->height * sizeof(t_data *));
-    while (++y < fil->height) {
-        fil->data[y] = (t_data *)malloc(fil->width * sizeof(t_data));
-    }
-    fd = open(str, O_RDONLY);
-    y = -1;
+	y = -1;
+	fd = open(str, O_RDONLY);
+	init_size(fd, fil);
+	fil->data = (t_data **)malloc(fil->height * sizeof(t_data *));
+	while (++y < fil->height) {
+		fil->data[y] = (t_data *)malloc(fil->width * sizeof(t_data));
+	}
+	fd = open(str, O_RDONLY);
+	y = -1;
+	while (++y < fil->height && (line = get_next_line(fd)) != NULL)
+	{
+		char *token = my_strtok(line, " ");
+		x = 0;
+		while (token != NULL) {
+			int z_value;
+			unsigned int color = 0xFFFFFFFF; 
+			char *comma_ptr = strchr(token, ',');
+			
+			if (comma_ptr != NULL) {
+				z_value = ft_atoi(token);
+				color = custom_parse_color(token);
+			}
+			else
+				z_value = ft_atoi(token);
+			fil->data[y][x].z = z_value;
+			fil->data[y][x].color = color;
+			token = my_strtok(NULL, " ");
+			x++;
+		}
+	}
 	
-    while (++y < fil->height && (line = get_next_line(fd)) != NULL)
-    {
-        char *token = my_strtok(line, " ");
-        x = 0;
-        while (token != NULL) {
-            int z_value;
-            int color = 0xFF; 
-            char *comma_ptr = strchr(token, ',');
-            
-            if (comma_ptr != NULL) {
-                z_value = ft_atoi(token);
-                color = custom_parse_color(token);
-            }
-            else
-                z_value = ft_atoi(token);
-            fil->data[y][x].z = z_value;
-            fil->data[y][x].color = color;
-            token = my_strtok(NULL, " ");
-			printf("%d\t", color);
-            x++;
-        }
-		printf("\n");
-    }
-	
-    close(fd);
+	close(fd);
 }
